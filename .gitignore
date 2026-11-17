@@ -1,0 +1,39 @@
+# Datos: NUNCA se suben a GitHub (limite 100 MB por archivo). Se re-descargan con scripts/download_data.py
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+*.csv
+!docs/*.csv
+*.parquet
+*.duckdb
+
+# Entorno y caches de Python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Secretos: nunca al repositorio
+.env
+*.pem
+kaggle.json
+
+# Artefactos de ML y herramientas (se usaran mas adelante)
+mlruns/
+mlartifacts/
+.dbt/
+target/
+logs/
+.terraform/
+*.tfstate*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Material interno (no se sube)
+_practica/
+.vscode/
