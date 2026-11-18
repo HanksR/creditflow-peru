@@ -1,4 +1,4 @@
-.PHONY: help setup data notebook lint format test hooks query clean-data
+.PHONY: help setup data notebook lint format test hooks clean-data
 help:
 	@echo make setup      - instala dependencias y activa pre-commit
 	@echo make data       - descarga y convierte los datos a Parquet
@@ -7,7 +7,6 @@ help:
 	@echo make format     - formatea el codigo con ruff
 	@echo make test       - corre las pruebas
 	@echo make hooks      - corre pre-commit en todos los archivos
-	@echo make query f=sql/04_morosidad_por_grade.sql - ejecuta una consulta
 	@echo make clean-data - borra los datos procesados
 setup:
 	poetry install
@@ -24,7 +23,5 @@ test:
 	poetry run pytest
 hooks:
 	poetry run pre-commit run --all-files
-query:
-	poetry run python scripts/run_query.py $(f)
 clean-data:
 	poetry run python -c "import shutil; shutil.rmtree('data/processed', ignore_errors=True)"
