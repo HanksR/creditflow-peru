@@ -1,10 +1,11 @@
 # creditflow-peru
 
-Sistema de scoring crediticio de punta a punta, construido en 15 semanas: SQL, dbt, pipelines de ML,
+Sistema de scoring crediticio de punta a punta, construido en 15 semanas: dbt, pipelines de ML,
 MLflow, Airflow, API (FastAPI), Docker, PySpark, streaming, CI/CD y despliegue en AWS,
 Google Cloud y Azure.
 
-> Estado: **Semana 1 completada** (SQL analítico, estructura del repositorio y herramientas).
+> Estado: **Semana 1 completada** (estructura del repositorio, herramientas y definición de mora).
+> Siguiente: Semana 2 (Docker y PostgreSQL). El análisis exploratorio (EDA) llegará en un notebook.
 
 ## Problema de negocio
 
@@ -20,7 +21,6 @@ datos entendidos y la definición de mora escrita en código y protegida por pru
 ```bash
 poetry install      # crea el entorno e instala las versiones exactas de poetry.lock
 make data           # descarga, convierte a Parquet (~270 MB) y borra el CSV
-make query f=sql/04_morosidad_por_grade.sql
 make test
 ```
 
@@ -31,22 +31,6 @@ make test
 - Se excluyen `Current`, `Late` e `In Grace Period` (aún no sabemos cómo terminan) y 2 749 préstamos
   antiguos marcados `Does not meet the credit policy`.
 - La definición vive en `src/creditflow/definitions.py` y está protegida por pruebas.
-
-## Hallazgos
-
-Morosidad por calificación de riesgo (`grade`), sobre préstamos terminados:
-
-| Grade | A | B | C | D | E | F | G |
-|---|---|---|---|---|---|---|---|
-| Morosidad | 6.04 % | 13.39 % | 22.44 % | 30.39 % | 38.48 % | 45.20 % | 49.93 % |
-
-- **El grade ordena bien el riesgo:** la mora se multiplica por ocho entre A y G.
-- **Depende de cuándo se emitió el préstamo:** va de 12.60 % (2009) a 23.29 % (2016).
-- **Más ingreso, menos mora:** 24.35 % por debajo de 30 mil dólares frente a 15.92 % sobre 100 mil.
-- **Los plazos largos cuestan más:** la tasa promedio es 11.95 % a 36 meses y 15.92 % a 60 meses.
-- **El negocio se concentra:** California, Texas y Nueva York son los tres estados con más dinero prestado.
-- **Sesgo en años recientes:** hay pocos préstamos terminados en 2018; los que siguen vigentes aún
-  pueden caer en mora, así que esa cifra subestima el riesgo real.
 
 ## Calidad de datos
 
@@ -63,16 +47,15 @@ Morosidad por calificación de riesgo (`grade`), sobre préstamos terminados:
 
 ## Rendimiento
 
-Leer 3 columnas de las 151 tarda 0.05 s frente a 1.94 s con `SELECT *` (mejor de 3 lecturas sobre
-los préstamos de grade A). Parquet es columnar: solo lee las columnas que la consulta necesita.
+Leer 3 columnas de las 151 tarda 0.05 s frente a 1.94 s leyéndolas todas (mejor de 3 lecturas sobre
+los préstamos de grade A). Parquet es columnar: solo lee las columnas que necesita.
 
 ## Estructura
 
 ```
 src/creditflow/   definición de mora y conexión a los datos
-sql/              15 consultas de análisis de morosidad
 tests/            pruebas de la definición de mora
-scripts/          descarga de datos y ejecutor de consultas
+scripts/          descarga de datos y generación del diccionario de datos
 docs/             diccionario de datos (151 columnas)
 ```
 
