@@ -7,6 +7,7 @@ Uso:
 Los datos NO se suben a GitHub (ver .gitignore). Este script permite recrearlos
 en minutos, asi que se pueden borrar sin perder nada.
 """
+
 import argparse
 import sys
 import urllib.request
@@ -14,8 +15,10 @@ from pathlib import Path
 
 import duckdb
 
-URL = ("https://huggingface.co/datasets/codesignal/lending-club-loan-accepted/"
-       "resolve/main/accepted_2007_to_2018Q4.csv")
+URL = (
+    "https://huggingface.co/datasets/codesignal/lending-club-loan-accepted/"
+    "resolve/main/accepted_2007_to_2018Q4.csv"
+)
 ROOT = Path(__file__).resolve().parents[1]
 CSV = ROOT / "data" / "raw" / "accepted_2007_to_2018Q4.csv"
 PARQUET = ROOT / "data" / "processed" / "lending_club.parquet"
@@ -59,8 +62,9 @@ def to_parquet() -> None:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--delete-csv", action="store_true",
-                    help="borra el CSV (1.7 GB) tras convertir a Parquet")
+    ap.add_argument(
+        "--delete-csv", action="store_true", help="borra el CSV (1.7 GB) tras convertir a Parquet"
+    )
     args = ap.parse_args()
     download()
     to_parquet()

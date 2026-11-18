@@ -11,10 +11,8 @@ Dataset: [Lending Club](https://huggingface.co/datasets/codesignal/lending-club-
 2.26 millones de prestamos. **Los datos no se guardan en este repositorio.**
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate          # Windows
-pip install -r requirements.txt
-python scripts/download_data.py --delete-csv   # descarga, convierte a Parquet (~270 MB) y borra el CSV
+poetry install      # crea el entorno e instala las versiones exactas de poetry.lock
+make data           # descarga, convierte a Parquet (~270 MB) y borra el CSV
 ```
 
 ## Estructura

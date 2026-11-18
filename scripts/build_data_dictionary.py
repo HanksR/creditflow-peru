@@ -9,6 +9,7 @@ Uso:  python scripts/build_data_dictionary.py
 Las descripciones se basan en el diccionario publico de Lending Club y en el nombre
 de cada campo. Las marcadas con (por confirmar) no tienen una definicion oficial segura.
 """
+
 from pathlib import Path
 
 import duckdb
@@ -45,7 +46,11 @@ D = {
     "term": (G2, "Plazo: ' 36 months' o ' 60 months' (viene con un espacio al inicio)", S),
     "int_rate": (G2, "Tasa de interes anual (%)", S),
     "installment": (G2, "Cuota mensual (USD)", S),
-    "grade": (G2, "Calificacion de riesgo asignada por Lending Club: A (menor riesgo) a G (mayor)", S),
+    "grade": (
+        G2,
+        "Calificacion de riesgo asignada por Lending Club: A (menor riesgo) a G (mayor)",
+        S,
+    ),
     "sub_grade": (G2, "Subcalificacion dentro del grade (A1 a G5)", S),
     "issue_d": (G2, "Mes y anio de emision, como texto ('Dec-2015')", S),
     "purpose": (G2, "Motivo del prestamo (consolidar deuda, tarjeta, casa, auto...)", S),
@@ -54,18 +59,34 @@ D = {
     "pymnt_plan": (G2, "Indica si el prestamo tiene plan de pagos especial (y/n)", N),
     "initial_list_status": (G2, "Estado inicial de publicacion del prestamo (w / f)", S),
     "application_type": (G2, "Tipo de solicitud: Individual o Joint App (conjunta)", S),
-    "disbursement_method": (G2, "Como se entrego el dinero: Cash o DirectPay (pago directo a acreedores)", S),
+    "disbursement_method": (
+        G2,
+        "Como se entrego el dinero: Cash o DirectPay (pago directo a acreedores)",
+        S,
+    ),
     # ---- 3. Resultado
-    "loan_status": (G3, "Estado actual del prestamo (Fully Paid, Charged Off, Current...). Es la variable que queremos predecir", N),
+    "loan_status": (
+        G3,
+        "Estado actual del prestamo (Fully Paid, Charged Off, Current...). Es la variable que queremos predecir",
+        N,
+    ),
     # ---- 4. Perfil del cliente
     "emp_title": (G4, "Cargo o puesto de trabajo del cliente (texto libre)", S),
     "emp_length": (G4, "Anios de antiguedad laboral ('< 1 year' a '10+ years')", S),
     "home_ownership": (G4, "Vivienda: RENT (alquila), MORTGAGE (hipoteca), OWN (propia), OTHER", S),
     "annual_inc": (G4, "Ingreso anual declarado (USD)", S),
-    "verification_status": (G4, "Si Lending Club verifico el ingreso: Verified, Source Verified, Not Verified", S),
+    "verification_status": (
+        G4,
+        "Si Lending Club verifico el ingreso: Verified, Source Verified, Not Verified",
+        S,
+    ),
     "zip_code": (G4, "Primeros 3 digitos del codigo postal ('123xx')", S),
     "addr_state": (G4, "Estado de residencia (EE. UU.)", S),
-    "dti": (G4, "Relacion deuda/ingreso: pagos mensuales de deuda sobre ingreso mensual (%), sin contar la hipoteca", S),
+    "dti": (
+        G4,
+        "Relacion deuda/ingreso: pagos mensuales de deuda sobre ingreso mensual (%), sin contar la hipoteca",
+        S,
+    ),
     # ---- 5. Historial crediticio
     "delinq_2yrs": (G5, "Atrasos de 30+ dias en los ultimos 2 anios (cantidad)", S),
     "earliest_cr_line": (G5, "Fecha de apertura de su primera linea de credito (texto)", S),
@@ -73,14 +94,26 @@ D = {
     "fico_range_high": (G5, "Puntaje FICO al solicitar: limite superior del rango", S),
     "inq_last_6mths": (G5, "Consultas de credito en los ultimos 6 meses", S),
     "mths_since_last_delinq": (G5, "Meses desde el ultimo atraso (vacio = nunca tuvo)", S),
-    "mths_since_last_record": (G5, "Meses desde el ultimo registro publico negativo (vacio = nunca)", S),
+    "mths_since_last_record": (
+        G5,
+        "Meses desde el ultimo registro publico negativo (vacio = nunca)",
+        S,
+    ),
     "open_acc": (G5, "Lineas de credito abiertas", S),
     "pub_rec": (G5, "Registros publicos negativos (quiebras, juicios)", S),
     "revol_bal": (G5, "Saldo total de credito revolvente (tarjetas) en USD", S),
     "revol_util": (G5, "% usado de su limite de credito revolvente", S),
     "total_acc": (G5, "Total de lineas de credito que ha tenido (abiertas y cerradas)", S),
-    "collections_12_mths_ex_med": (G5, "Cobranzas en los ultimos 12 meses, sin contar las medicas", S),
-    "mths_since_last_major_derog": (G5, "Meses desde la ultima falta grave (90+ dias de atraso)", S),
+    "collections_12_mths_ex_med": (
+        G5,
+        "Cobranzas en los ultimos 12 meses, sin contar las medicas",
+        S,
+    ),
+    "mths_since_last_major_derog": (
+        G5,
+        "Meses desde la ultima falta grave (90+ dias de atraso)",
+        S,
+    ),
     "acc_now_delinq": (G5, "Cuentas actualmente en mora", S),
     "tot_coll_amt": (G5, "Monto total que ha pasado por cobranza (USD)", S),
     "tot_cur_bal": (G5, "Saldo actual de todas sus cuentas (USD)", S),
@@ -124,7 +157,11 @@ D = {
     "num_rev_accts": (G5, "Total de cuentas revolventes", S),
     "num_rev_tl_bal_gt_0": (G5, "Cuentas revolventes con saldo mayor a 0", S),
     "num_sats": (G5, "Cuentas en buen estado (satisfactorias)", S),
-    "num_tl_120dpd_2m": (G5, "Cuentas con 120+ dias de atraso en los ultimos 2 meses (por confirmar)", S),
+    "num_tl_120dpd_2m": (
+        G5,
+        "Cuentas con 120+ dias de atraso en los ultimos 2 meses (por confirmar)",
+        S,
+    ),
     "num_tl_30dpd": (G5, "Cuentas con 30 dias de atraso ahora", S),
     "num_tl_90g_dpd_24m": (G5, "Cuentas con 90+ dias de atraso en los ultimos 24 meses", S),
     "num_tl_op_past_12m": (G5, "Cuentas abiertas en los ultimos 12 meses", S),
@@ -166,11 +203,27 @@ D = {
     "sec_app_revol_util": (G7, "Uso de credito revolvente del segundo solicitante (%)", S),
     "sec_app_open_act_il": (G7, "Cuentas a plazos activas del segundo solicitante", S),
     "sec_app_num_rev_accts": (G7, "Cuentas revolventes del segundo solicitante", S),
-    "sec_app_chargeoff_within_12_mths": (G7, "Deudas castigadas del segundo solicitante (12 meses)", S),
-    "sec_app_collections_12_mths_ex_med": (G7, "Cobranzas del segundo solicitante (12 meses, sin medicas)", S),
-    "sec_app_mths_since_last_major_derog": (G7, "Meses desde la ultima falta grave del segundo solicitante", S),
+    "sec_app_chargeoff_within_12_mths": (
+        G7,
+        "Deudas castigadas del segundo solicitante (12 meses)",
+        S,
+    ),
+    "sec_app_collections_12_mths_ex_med": (
+        G7,
+        "Cobranzas del segundo solicitante (12 meses, sin medicas)",
+        S,
+    ),
+    "sec_app_mths_since_last_major_derog": (
+        G7,
+        "Meses desde la ultima falta grave del segundo solicitante",
+        S,
+    ),
     # ---- 8. Hardship
-    "hardship_flag": (G8, "Indica si el prestamo entro a un programa de dificultad financiera (Y/N)", N),
+    "hardship_flag": (
+        G8,
+        "Indica si el prestamo entro a un programa de dificultad financiera (Y/N)",
+        N,
+    ),
     "hardship_type": (G8, "Tipo de programa de ayuda", N),
     "hardship_reason": (G8, "Motivo de la dificultad financiera", N),
     "hardship_status": (G8, "Estado del programa de ayuda", N),
@@ -182,11 +235,19 @@ D = {
     "hardship_length": (G8, "Duracion de la ayuda (meses)", N),
     "hardship_dpd": (G8, "Dias de atraso al iniciar la ayuda", N),
     "hardship_loan_status": (G8, "Estado del prestamo durante la ayuda", N),
-    "orig_projected_additional_accrued_interest": (G8, "Interes adicional proyectado por la ayuda (USD)", N),
+    "orig_projected_additional_accrued_interest": (
+        G8,
+        "Interes adicional proyectado por la ayuda (USD)",
+        N,
+    ),
     "hardship_payoff_balance_amount": (G8, "Saldo a pagar para cerrar la ayuda (USD)", N),
     "hardship_last_payment_amount": (G8, "Ultimo pago durante la ayuda (USD)", N),
     # ---- 9. Settlement
-    "debt_settlement_flag": (G9, "Indica si el cliente negocio liquidar la deuda por menos del total (Y/N)", N),
+    "debt_settlement_flag": (
+        G9,
+        "Indica si el cliente negocio liquidar la deuda por menos del total (Y/N)",
+        N,
+    ),
     "debt_settlement_flag_date": (G9, "Fecha en que se marco la liquidacion", N),
     "settlement_status": (G9, "Estado de la liquidacion", N),
     "settlement_date": (G9, "Fecha de la liquidacion", N),
@@ -208,51 +269,70 @@ def build() -> pd.DataFrame:
     # 1) % de vacios sobre TODAS las filas: una sola pasada (count(col) cuenta no nulos)
     total = con.execute("SELECT count(*) FROM loans").fetchone()[0]
     nonnull = con.execute(
-        "SELECT " + ", ".join(f'count("{c}")' for c in cols.column_name) + " FROM loans").fetchone()
+        "SELECT " + ", ".join(f'count("{c}")' for c in cols.column_name) + " FROM loans"
+    ).fetchone()
 
     # 2) valores distintos sobre una muestra de 200 000 filas (aproximado, barato)
-    con.execute("CREATE TEMP TABLE muestra AS SELECT * FROM loans USING SAMPLE 200000 ROWS (reservoir, 42)")
+    con.execute(
+        "CREATE TEMP TABLE muestra AS SELECT * FROM loans USING SAMPLE 200000 ROWS (reservoir, 42)"
+    )
     distintos = con.execute(
-        "SELECT " + ", ".join(f'count(DISTINCT "{c}")' for c in cols.column_name) + " FROM muestra").fetchone()
+        "SELECT " + ", ".join(f'count(DISTINCT "{c}")' for c in cols.column_name) + " FROM muestra"
+    ).fetchone()
 
     out = []
     for i, r in enumerate(cols.itertuples()):
         grupo, desc, antes = D[r.column_name]
         # 3) ejemplo: primer valor no nulo (la consulta se detiene en cuanto lo encuentra)
-        ej = con.execute(f'SELECT "{r.column_name}" FROM loans WHERE "{r.column_name}" IS NOT NULL LIMIT 1').fetchone()
-        out.append({
-            "orden": i + 1, "columna": r.column_name, "grupo": grupo, "tipo": r.column_type,
-            "se_conoce_al_solicitar": antes,
-            "pct_vacios": round(100 * (1 - nonnull[i] / total), 1),
-            "valores_distintos_muestra": distintos[i],
-            "ejemplo": "" if ej is None else str(ej[0])[:40],
-            "descripcion": desc,
-        })
+        ej = con.execute(
+            f'SELECT "{r.column_name}" FROM loans WHERE "{r.column_name}" IS NOT NULL LIMIT 1'
+        ).fetchone()
+        out.append(
+            {
+                "orden": i + 1,
+                "columna": r.column_name,
+                "grupo": grupo,
+                "tipo": r.column_type,
+                "se_conoce_al_solicitar": antes,
+                "pct_vacios": round(100 * (1 - nonnull[i] / total), 1),
+                "valores_distintos_muestra": distintos[i],
+                "ejemplo": "" if ej is None else str(ej[0])[:40],
+                "descripcion": desc,
+            }
+        )
     return pd.DataFrame(out)
 
 
 def to_markdown(df: pd.DataFrame) -> str:
     n_sol = (df.se_conoce_al_solicitar == "Si").sum()
-    L = ["# Diccionario de datos - Lending Club",
-         "",
-         f"Tabla `loans`: **{len(df)} columnas** y 2 260 668 filas (un prestamo por fila). "
-         "Se genera con `python scripts/build_data_dictionary.py`.",
-         "",
-         "## Idea clave: que se conoce al momento de solicitar",
-         "",
-         f"De las {len(df)} columnas, **{n_sol}** se conocen cuando el cliente pide el prestamo y "
-         f"**{len(df) - n_sol}** se generan **despues** (pagos, cobranza, ayudas, liquidaciones, resultado).",
-         "Para predecir mora solo se pueden usar las primeras; usar las demas es **fuga de datos "
-         "(data leakage)** y da modelos que parecen perfectos pero no sirven en produccion.",
-         "",
-         "## Resumen por grupo",
-         "",
-         "| Grupo | Columnas | Se conoce al solicitar |", "|---|---:|---|"]
+    L = [
+        "# Diccionario de datos - Lending Club",
+        "",
+        f"Tabla `loans`: **{len(df)} columnas** y 2 260 668 filas (un prestamo por fila). "
+        "Se genera con `python scripts/build_data_dictionary.py`.",
+        "",
+        "## Idea clave: que se conoce al momento de solicitar",
+        "",
+        f"De las {len(df)} columnas, **{n_sol}** se conocen cuando el cliente pide el prestamo y "
+        f"**{len(df) - n_sol}** se generan **despues** (pagos, cobranza, ayudas, liquidaciones, resultado).",
+        "Para predecir mora solo se pueden usar las primeras; usar las demas es **fuga de datos "
+        "(data leakage)** y da modelos que parecen perfectos pero no sirven en produccion.",
+        "",
+        "## Resumen por grupo",
+        "",
+        "| Grupo | Columnas | Se conoce al solicitar |",
+        "|---|---:|---|",
+    ]
     for g, sub in df.groupby("grupo"):
         L.append(f"| {g} | {len(sub)} | {sub.se_conoce_al_solicitar.iloc[0]} |")
     L.append("")
     for g, sub in df.groupby("grupo"):
-        L += [f"## {g}", "", "| Columna | Tipo | % vacios | Ejemplo | Significado |", "|---|---|---:|---|---|"]
+        L += [
+            f"## {g}",
+            "",
+            "| Columna | Tipo | % vacios | Ejemplo | Significado |",
+            "|---|---|---:|---|---|",
+        ]
         for r in sub.itertuples():
             ej = r.ejemplo.replace("|", "/")
             L.append(f"| `{r.columna}` | {r.tipo} | {r.pct_vacios} | {ej} | {r.descripcion} |")

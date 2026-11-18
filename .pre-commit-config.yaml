@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.5
+    hooks:
+      - id: ruff-check
+        args: ["--fix"]
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: detect-private-key
+        name: detect private key
+        entry: python -m pre_commit_hooks.detect_private_key
+        language: python
+        additional_dependencies: ["pre-commit-hooks==6.0.0"]
+        types: [text]
+      - id: check-added-large-files
+        name: check for added large files
+        entry: python -m pre_commit_hooks.check_added_large_files --maxkb=500
+        language: python
+        additional_dependencies: ["pre-commit-hooks==6.0.0"]
